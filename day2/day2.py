@@ -1,7 +1,7 @@
 import re
 
 # task 1
-sum = 0
+answer = 0
 redCubes = 12
 greenCubes = 13
 blueCubes = 14
@@ -17,12 +17,12 @@ for line in open("input", "r"):
     bluePossible = max(list(map(int, blueDraws))) <= blueCubes
 
     if redPossible and bluePossible and greenPossible:
-        sum += int(gameNumber)
+        answer += int(gameNumber)
 
-print(sum)
+print(answer)
 
 # task 2
-sum = 0
+answer = 0
 
 for line in open("input", "r"):
     blueDraws = re.findall(string=line, pattern=r'\d+ (?=blue)')
@@ -31,7 +31,7 @@ for line in open("input", "r"):
     redCubesNeeded = max(list(map(int, redDraws)))
     greenCubesNeeded = max(list(map(int, greenDraws)))
     blueCubesNedded = max(list(map(int, blueDraws)))
-    sum += redCubesNeeded * blueCubesNedded * greenCubesNeeded
+    answer += redCubesNeeded * blueCubesNedded * greenCubesNeeded
 
 
-print(sum)
+print(answer)
