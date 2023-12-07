@@ -1,53 +1,118 @@
+def determineHandType(cards: list[int]) -> int:
+    matches: list[int] = [0, 0, 0, 0]
+    JOKER_VALUE = 1
 
-def determineHandType(cards):
-    matches = [0,0,0,0]
-
-    for i in range (0, 4):
-        for j in range(i+1,5):
-            if cards[i] == cards [j]:
-                matches[i] += 1
+    for currentCard in range(0, len(cards)-1):
+        for nextCard in range(currentCard + 1, len(cards)):
+            if cards[currentCard] == cards[nextCard] and cards[currentCard] != JOKER_VALUE:
+                matches[currentCard] += 1
     return sum(matches)
 
-def handSortKey(hand):
-    key = hand[0] * 10**10
 
-    i = 8
-    for card in hand[1]:
-        key += card * 10**i
-        i -= 2
+def handSortKey(hand):
+    HAND_TYPE_INDEX: int = 0
+    CARDS_INDEX: int = 1
+
+    exponent: int = 10
+    key: int = 0
+
+    key += hand[HAND_TYPE_INDEX] * (10 ** exponent)
+
+    for card in hand[CARDS_INDEX]:
+        exponent -= 2
+        key += card * (10 ** exponent)
+
     return key
 
 
-#task 1
-answer = 0
-hands = []
-for line in open("input", "r"):
-    cards, bid = line.replace("\n", "").split(" ")
+def computeTask1():
+    answer: int = 0
+    hands: list = []
 
-    cards = list(cards)
-    for i in range(0,len(cards)):
-        card = cards[i]
-        if card == "A":
-            cards[i] = 14
-        elif card == "K":
-            cards[i] = 13
-        elif card == "Q":
-            cards[i] = 12
-        elif card == "J":
-            cards[i] = 11
-        elif card == "T":
-            cards[i] = 10
-        else:
-            cards[i] = int(card)
+    for line in open("input", "r"):
+        lineSplit: list[str] = line.replace("\n", "").split(" ")
 
-    type = determineHandType(cards)
-    hands.append([type,cards,bid])
+        cards: list = list(lineSplit[0])
+        bid: int = int(lineSplit[1])
 
-hands.sort(key=handSortKey)
+        for i in range(0, len(cards)):
+            card = cards[i]
+            match card:
+                case "A":
+                    cards[i] = 14
+                case "K":
+                    cards[i] = 13
+                case "Q":
+                    cards[i] = 12
+                case "J":
+                    cards[i] = 11
+                case "T":
+                    cards[i] = 10
+                case _:
+                    cards[i] = int(card)
 
-for i in range(0, len(hands)):
-    answer += (i+1)*int(hands[i][2])
+        handType: int = determineHandType(cards)
+        hands.append([handType, cards, bid])
 
-print(answer)
+    hands.sort(key=handSortKey)
 
+    for i in range(0, len(hands)):
+        answer += (i + 1) * int(hands[i][2])
+
+    print(answer)
+
+
+def computeTask2():
+    answer: int = 0
+    hands: list = []
+
+    for line in open("input", "r"):
+        lineSplit: list[str] = line.replace("\n", "").split(" ")
+
+        cards: list = list(lineSplit[0])
+        bid: int = int(lineSplit[1])
+
+        for i in range(0, len(cards)):
+            card = cards[i]
+            match card:
+                case "A":
+                    cards[i] = 14
+                case "K":
+                    cards[i] = 13
+                case "Q":
+                    cards[i] = 12
+                case "J":
+                    cards[i] = 1
+                case "T":
+                    cards[i] = 10
+                case _:
+                    cards[i] = int(card)
+
+        handType = determineHandType(cards)
+
+        for card in cards:
+            if card == 1:
+                if handType == 0:
+                    handType = 1
+                elif handType == 1:
+                    handType = 3
+                elif handType == 3:
+                    handType = 6
+                elif handType == 6:
+                    handType = 10
+                elif handType == 2:
+                    handType = 4
+
+        hands.append([handType, cards, bid])
+
+    hands.sort(key=handSortKey)
+
+    for i in range(0, len(hands)):
+        answer += (i + 1) * int(hands[i][2])
+
+    print(answer)
+
+
+computeTask1()
+computeTask2()
 

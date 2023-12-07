@@ -30,8 +30,8 @@ for line in open("input", "r"):
     greenDraws = re.findall(string=line, pattern=r'\d+ (?=green)')
     redCubesNeeded = max(list(map(int, redDraws)))
     greenCubesNeeded = max(list(map(int, greenDraws)))
-    blueCubesNedded = max(list(map(int, blueDraws)))
-    answer += redCubesNeeded * blueCubesNedded * greenCubesNeeded
+    blueCubesNeeded = max(list(map(int, blueDraws)))
+    answer += redCubesNeeded * blueCubesNeeded * greenCubesNeeded
 
 
 print(answer)
