@@ -1,4 +1,5 @@
 import re
+import math
 
 
 class Node:
@@ -47,10 +48,6 @@ def computeTask1():
     print(answer)
 
 
-def startNodeFilter(node: Node):
-    return node.name[2] == "A"
-
-
 def computeTask2():
     nodes: list[Node] = []
 
@@ -61,32 +58,36 @@ def computeTask2():
 
     for line in input:
         values: list[str] = re.findall(r"\w{3}", line)
-        node: Node = Node(name=values[0], leftInstruction=[1], rightInstruction=[2])
+        node: Node = Node(name=values[0], leftInstruction=values[1], rightInstruction=values[2])
         nodes.append(node)
 
     instructionIndex: int = 0
-    answer: int = 0
+    answers: list[int] = []
 
-    print(filter(startNodeFilter, nodes))
+    nextNodeNames: list[str] = list(map(lambda n: n.name, filter(lambda n: n.name[2] == "A", nodes)))
 
-    nextNodeName: str = "AAA"
+    for nextNodeName in nextNodeNames:
+        answer = 0
+        while nextNodeName[2] != "Z":
 
-    while nextNodeName != "ZZZ":
-        if instructionIndex == len(instructions):
-            instructionIndex = 0
+            if instructionIndex == len(instructions):
+                instructionIndex = 0
 
-        for node in nodes:
-            if node.name == nextNodeName:
-                if instructions[instructionIndex] == 'L':
-                    nextNodeName = node.leftInstruction
-                    break
-                else:
-                    nextNodeName = node.rightInstruction
-                    break
+            for node in nodes:
+                if node.name == nextNodeName:
+                    if instructions[instructionIndex] == 'L':
+                        nextNodeName = node.leftInstruction
+                        break
+                    else:
+                        nextNodeName = node.rightInstruction
+                        break
 
-        instructionIndex += 1
-        answer += 1
-    print(answer)
+            instructionIndex += 1
+            answer += 1
+        answers.append(answer)
+
+    print(math.lcm(*answers))
 
 
 computeTask1()
+computeTask2()
